@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block head %}
-        <title>Quiver</title>
-        <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css"></script>
-    {% endblock %}
+    <title>Quiver</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+    {% block head %}{% endblock %}
 </head>
 <body>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="content" class="container">
+        <div style="text-align:center;">
+            <h2 class="large"><a href="{{ url_for('quiver') }}">Quiver</a></h2>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8" style="text-align:center;">
+            <hr>
+            {% block content %}{% endblock %}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
     <div id="footer">
         {% block footer %}{% endblock %}
     </div>

@@ -1,8 +1,20 @@
 {% extends "base.html" %}
 
+{% block head %}
+<script type="text/javascript">
+// Ajax request will go here
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="text-center">
-    <h2 class="large">Quiver</h2>    
+    <p>Please enter an equation</p>
+    <form id="equation" action="{{ url_for('plot') }}" method="post">
+        <sup>dy</sup>&frasl;<sub>dx</sub>=<input type="text" name="equation"/>
+        <input type="submit" id="submit" value="Submit"/>
+    </form>
+    <div id="plot">
+    </div>
 </div>
 
 {% endblock %}
