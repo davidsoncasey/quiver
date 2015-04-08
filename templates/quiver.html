@@ -14,12 +14,31 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <p>Please enter an equation</p>
-    <form id="equation" action="{{ url_for('plot') }}" method="post">
-        <sup>dy</sup>&frasl;<sub>dx</sub>=<input type="text" name="equation"/>
-        <input type="submit" id="submit" value="Submit"/>
-    </form>
+<div>
+    <p>
+        Quiver is a tool to plot direction fields of first-order differential equations.
+        It is intended to be a quick and simple tool, and supports the following mathematical operations:
+    </p>
+    <ul>
+        <li>Addition and subtraction</li>
+        <li>Multiplication, division, and exponentiation</li>
+        <li>Sine and cosine</li>
+        <li>Natural exponentiation and natural logarithm</li>
+    </ul>
+    <p>
+        Quiver is written in Python, and uses <a href="http://www.sympy.org">SymPy</a>
+        and <a href="http://matplotlib.org">matplotlib</a> to generate and plot equations.
+        Variables are assumed to be named "x" and "y" and mathematical operators should be
+        entered with Python syntax (+, -, *, /, **, sin, cos, exp and log).
+    </p>
+    <br/>
+    <div style="text-align: center;">
+    <p>Go ahead and give it a try</p>
+        <form id="equation-form" action="{{ url_for('plot') }}" method="get">
+            <sup>dy</sup>&frasl;<sub>dx</sub>=<input type="text" name="equation"/>
+            <input type="button" id="submit" value="Plot"/>
+        </form>
+    </div>
     <div id="plot">
     </div>
 </div>
