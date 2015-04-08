@@ -2,7 +2,14 @@
 
 {% block head %}
 <script type="text/javascript">
-// Ajax request will go here
+$(function() {
+    $('#equation-form').submit(function() {
+        $.get('{{ url_for("plot") }}', $(this).serializeArray(), function(data) {
+            $('#plot').html(data);
+        });
+    return false;
+    });
+});
 </script>
 {% endblock %}
 

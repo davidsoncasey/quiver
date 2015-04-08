@@ -9,11 +9,7 @@ def quiver():
 
 @app.route('/plot/', methods=['GET', 'POST'])
 def plot():
-    print request.values
-    if request.method == 'POST':
-        equation = request.form.get('equation')
-    else:
-        equation = request.args.get('equation')
+    equation = request.args.get('equation')
     return render_template('plot.html', equation=equation)
 
 if __name__ == '__main__':
