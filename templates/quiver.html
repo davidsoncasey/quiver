@@ -5,7 +5,7 @@
 $(function() {
     $('#equation-form').submit(function() {
         $.get('{{ url_for("plot") }}', $(this).serializeArray(), function(data) {
-            $('#plot').html(data);
+            $('#plot').html('<img src="data:image/png;base64,' + data + '" />');
         });
     return false;
     });
