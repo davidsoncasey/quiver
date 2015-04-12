@@ -17,48 +17,56 @@ app = Flask(__name__)
 def quiver():
     return render_template('quiver.html')
 
-@app.route('/plot/', methods=['GET', 'POST'])
-def plot():
-    equation = None
-    equation_string = request.args.get('equation')
-    
-    # See if the input passes a basic regular expression check
-    m = re.match('^([xy+\-*/()0-9. ]+|sin|cos|exp|log)+$', equation_string)
-    
-    # If the input passes first check, create a SymPy equation and plot a vector field
-    if m:
+def prep_equation(equation_string):
+    # First do a regualar expression check to verify that they've actually entered an equation
+    match = re.match('^([xy+\-*/()0-9. ]+|sin|cos|exp|log)+$', equation_string)
+    if match:
         try:
             equation = sympify(equation_string)
             f = lambdify((x, y), equation)
-            xvals, yvals = np.arange(-10, 11, 1), np.arange(-10, 11, 1)
-            X, Y = np.meshgrid(xvals, yvals)
-            U, V = np.meshgrid(np.ones(len(xvals)), np.zeros(len(yvals)))
-            for i, a in enumerate(xvals):
-                for j, b in enumerate(yvals):
-                    dx = 1
-                    try:
-                        dy = f(a, b)
-                        n = sqrt(dx + dy**2)
-                        dx /= n
-                        dy /= n
-                    except ValueError, ZeroDivisionError:
-                        dx, dy = 0, 0
-                    U[j][i] = dx
-                    V[j][i] = dy
-            
-            fig = plt.Figure()
-            axis = fig.add_subplot(1,1,1)
-            axis.quiver(X, Y, U, V)
-            
-            canvas = FigureCanvas(fig)
-            output = StringIO.StringIO()
-            fig.savefig(output, format='png')
-            output.seek(0)
-            response = make_response(base64.b64encode(output.getvalue()))
-            response.mimetype = 'image/png'
+            return f
         except SympifyError:
             pass
-    return response
+    return None
+
+@app.route('/plot/', methods=['GET',])
+def plot():
+    equation_string = request.args.get('equation')
+    f = prep_equation(equation_string)
+    
+    # If the equation is valid, compute the values for each value in the grid
+    if f:
+        xvals, yvals = np.arange(-10, 11, 1), np.arange(-10, 11, 1)
+        X, Y = np.meshgrid(xvals, yvals)
+        U, V = np.meshgrid(np.zeros(len(xvals)), np.zeros(len(yvals)))
+        for i, a in enumerate(xvals):
+            for j, b in enumerate(yvals):
+                dx = 1
+                try:
+                    dy = f(a, b)
+                    n = sqrt(dx + dy**2)
+                    dx /= n
+                    dy /= n
+                    U[j][i] = dx        
+                    V[j][i] = dy
+                except (ValueError, ZeroDivisionError):
+                    pass
+        
+        # Plot the values
+        fig = plt.Figure()
+        axis = fig.add_subplot(1,1,1)
+        axis.quiver(X, Y, U, V)
+        
+        # Write output to memory and add to response object
+        output = StringIO.StringIO()
+        canvas = FigureCanvas(fig)
+        fig.savefig(output, format='png')
+        output.seek(0)
+        response = make_response(base64.b64encode(output.getvalue()))
+        response.mimetype = 'image/png'
+        return response
+    else:
+        return make_response('')
 
 if __name__ == '__main__':
     app.run(debug=True)
