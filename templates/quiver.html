@@ -4,15 +4,18 @@
 <script type="text/javascript">
 $(function() {
     $('#equation-form').submit(function() {
+        $('#plot #error').hide('fast');
         $.get('{{ url_for("plot") }}', $(this).serializeArray(), function(data, status, xhr) {
-            // If the response is an image, display it
             var ct = xhr.getResponseHeader('content-type') || '';
+            
+            // If the response is an image, display it in plot div.
+            // Otherwise, show the error div
             if (ct == 'image/png') {
                 $('#plot').html('<img src="data:image/png;base64,' + data + '" />');
-                $('#error').hide();
+                $('#error').hide('fast');
                 $('#plot').show('fast');
             } else {
-                $('#plot').hide();
+                $('#plot').hide('fast');
                 $('#error').show('fast');
             }
         });
