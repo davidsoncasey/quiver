@@ -19,8 +19,9 @@ def quiver():
 
 def prep_equation(equation_string):
     # First do a regualar expression check to verify that they've actually entered an equation
-    match = re.match('^([xy+\-*/()0-9. ]+|sin|cos|exp|log)+$', equation_string)
-    if match:
+    match1 = re.match('^(([xy+\-*/()0-9. ]+|sin|cos|exp|log)?)+$', equation_string)
+    match2 = re.match('^.*([xy]) *([xy]).*$', equation_string)
+    if match1 and not match2:
         try:
             equation = sympify(equation_string)
             f = lambdify((x, y), equation)
