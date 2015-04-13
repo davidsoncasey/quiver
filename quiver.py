@@ -4,7 +4,7 @@ import StringIO
 import base64
 from math import sqrt
 from flask import Flask, render_template, request, make_response
-from sympy import sympify, SympifyError
+from sympy import sympify, SympifyError, latex
 from sympy.utilities.lambdify import lambdify
 from sympy.abc import x, y
 import numpy as np
@@ -15,25 +15,26 @@ app = Flask(__name__)
 
 @app.route('/')
 def quiver():
+    '''Route for homepage'''
     return render_template('quiver.html')
 
 def prep_equation(equation_string):
     # First do a regualar expression check to verify that they've actually entered an equation
-    match1 = re.match('^(([xy+\-*/()0-9. ]+|sin|cos|exp|log)?)+$', equation_string)
+    match1 = re.match('^(([xy+\-*/()0-9. ]+|sin\(|cos\(|exp\(|log\()?)+$', equation_string)
     match2 = re.match('^.*([xy]) *([xy]).*$', equation_string)
     if match1 and not match2:
         try:
             equation = sympify(equation_string)
             f = lambdify((x, y), equation)
-            return f
+            return f, equation
         except SympifyError:
             pass
-    return None
+    return None, None
 
 @app.route('/plot/', methods=['GET',])
 def plot():
     equation_string = request.args.get('equation')
-    f = prep_equation(equation_string)
+    f, equation = prep_equation(equation_string)
     
     # If the equation is valid, compute the values for each value in the grid
     if f:
@@ -55,8 +56,11 @@ def plot():
         
         # Plot the values
         fig = plt.Figure()
-        axis = fig.add_subplot(1,1,1)
-        axis.quiver(X, Y, U, V)
+        axes = fig.add_subplot(1,1,1)
+        axes.quiver(X, Y, U, V, angles='xy')
+        axes.axhline(color='black')
+        axes.axvline(color='black')
+        axes.set_title(r'Direction field for $\frac{dy}{dx} = %s$' % latex(equation), y=1.01)
         
         # Write output to memory and add to response object
         output = StringIO.StringIO()
