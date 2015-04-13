@@ -47,8 +47,8 @@ def plot():
                 try:
                     dy = f(a, b)
                     n = sqrt(dx + dy**2)
-                    dx /= n
-                    dy /= n
+                    dy /= sqrt(n)
+                    dx /= sqrt(n)
                     U[j][i] = dx        
                     V[j][i] = dy
                 except (ValueError, ZeroDivisionError):
