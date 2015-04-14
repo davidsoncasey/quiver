@@ -2,9 +2,7 @@ from __future__ import division
 import re
 from math import sqrt
 
-from sympy import sympify, SympifyError, latex
-from sympy.utilities.lambdify import lambdify
-from sympy.abc import x, y
+import sympy
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -14,7 +12,6 @@ class DiffEquation(object):
     Class that contains equation information and, if the equation is valid,
     prepares the plot.
     '''
-    
     def __init__(self, equation_string):
         self.equation_string = equation_string
         self.equation = None
@@ -71,8 +68,9 @@ class DiffEquation(object):
             axes.quiver(X, Y, U, V, angles='xy')
             axes.axhline(color='black')
             axes.axvline(color='black')
-            axes.set_title(r'Direction field for $\frac{dy}{dx} = %s$' % latex(self.equation), y=1.01)
-        
+            latex = sympy.latex(self.equation)
+            axes.set_title(r'Direction field for $\frac{dy}{dx} = %s$' % latex, y=1.01)
+    
     def write_data(self, output):
         '''Write the data out as base64 binary'''
         if self.figure:
