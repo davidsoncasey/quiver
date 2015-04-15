@@ -1,6 +1,8 @@
 from __future__ import division
 import re
 from math import sqrt
+import multiprocessing
+import Queue
 
 import sympy
 import numpy as np
@@ -33,11 +35,34 @@ class DiffEquation(object):
         numerically.
         '''
         if self.regex_check():
+            q = multiprocessing.Queue()
+            def prep(conn):
+                try:
+                    equation = sympy.sympify(self.equation_string)
+                    q.put(equation)
+                except sympy.SympifyError:
+                    pass
+            
+            p = multiprocessing.Process(target=prep, args=(q,))
+            p.start()
+            
+            # See if we can get the equation within 5 seconds
             try:
-                self.equation = sympify(self.equation_string)
-                self.compute_func = lambdify((x, y), self.equation)
-            except SympifyError:
-                pass
+                equation = q.get(timeout=5)
+            except Queue.Empty:
+                equation = None
+            q.close()
+            
+            # If the process is still running, kill it
+            if p.is_alive():
+                p.terminate()
+                p.join()
+            
+            if equation:    
+                self.equation = equation
+                x, y = sympy.symbols('x,y')
+                compute_func = sympy.utilities.lambdify((x, y), self.equation)
+                self.compute_func = compute_func
     
     def make_plot(self):
         '''Draw the plot on the figure attribute'''
