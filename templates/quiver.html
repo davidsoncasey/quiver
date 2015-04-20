@@ -12,8 +12,9 @@ $(function() {
             // Otherwise, show the error div
             if (ct == 'image/png') {
                 $('#plot').html('<img src="data:image/png;base64,' + data + '" />');
-                $('#error').hide('fast');
-                $('#plot').show('fast');
+                $('#error').hide();
+                $('#plot').show();
+                $(window).scrollTo('#plot', 'fast');
             } else {
                 $('#plot').hide('fast');
                 $('#error').show('fast');
