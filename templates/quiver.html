@@ -14,7 +14,7 @@ $(function() {
                 $('#plot').html('<img src="data:image/png;base64,' + data + '" />');
                 $('#error').hide();
                 $('#plot').show();
-                $(window).scrollTo('#plot', 'fast');
+                $(window).localScroll('#plot', 'fast');
             } else {
                 $('#plot').hide('fast');
                 $('#error').show('fast');
