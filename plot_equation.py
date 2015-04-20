@@ -4,10 +4,12 @@ from math import sqrt
 import multiprocessing
 import Queue
 
+
 import sympy
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 
 class DiffEquation(object):
     '''
