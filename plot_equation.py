@@ -90,7 +90,7 @@ class DiffEquation(object):
             # Plot the values
             self.figure = plt.Figure()
             axes = self.figure.add_subplot(1,1,1)
-            axes.quiver(X, Y, U, V, angles='xy')
+            axes.quiver(X, Y, U, V, angles='xy', color='b', edgecolors=('k',))
             axes.axhline(color='black')
             axes.axvline(color='black')
             latex = sympy.latex(self.equation)
