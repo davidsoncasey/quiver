@@ -41,14 +41,14 @@ class DiffEquation(object):
                     equation = sympy.sympify(self.equation_string)
                     q.put(equation)
                 except sympy.SympifyError:
-                    pass
+                    q.put(None)
             
             p = multiprocessing.Process(target=prep, args=(q,))
             p.start()
             
             # See if we can get the equation within 5 seconds
             try:
-                equation = q.get(timeout=5)
+                equation = q.get(timeout=3)
             except Queue.Empty:
                 equation = None
             q.close()
