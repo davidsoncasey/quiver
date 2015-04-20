@@ -14,10 +14,15 @@ $(function() {
                 $('#plot').html('<img src="data:image/png;base64,' + data + '" />');
                 $('#error').hide();
                 $('#plot').show();
-                $(window).localScroll('#plot', 'fast');
+                setTimeout(function() {
+                    $(window).scrollTo('#plot');
+                }, 200);
             } else {
-                $('#plot').hide('fast');
-                $('#error').show('fast');
+                $('#plot').hide();
+                $('#error').show();
+                setTimeout(function() {
+                    $(window).scrollTo('#error');                    
+                }, 200);
             }
         });
     return false;
