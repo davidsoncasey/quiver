@@ -27,6 +27,12 @@ $(function() {
         });
     return false;
     });
+    
+    $('.example').click(function() {
+        $('#equation').val($(this).text());
+        $('#equation-form').submit();
+        return false;
+    });
 });
 </script>
 {% endblock %}
@@ -57,14 +63,14 @@ $(function() {
         entered with Python syntax (+, -, *, /, **, sin, cos, exp and log). Here are some examples you can try:
     </p>
     <ul>
-        <li>x + y</li>
-        <li>2*x + cos(x**y)</li>
-        <li>sin(log(x))</li>
+        <li><a class="example">x + y</a></li>
+        <li><a class="example">2*x + cos(x**y)</a></li>
+        <li><a class="example">sin(log(x))</a></li>
     </ul>
     <div style="text-align: center;">
     <p>Go ahead and give it a try</p>
         <form id="equation-form" action="{{ url_for('plot') }}" method="get">
-            <sup>dy</sup>&frasl;<sub>dx</sub>=<input type="text" name="equation"/>
+            <sup>dy</sup>&frasl;<sub>dx</sub>=<input type="text" name="equation" id="equation"/>
             <input type="submit" id="submit" value="Plot"/>
         </form>
     </div>
