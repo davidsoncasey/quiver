@@ -26,9 +26,7 @@ class DiffEquation(object):
         '''A quick regular expression check to see that the input resembles an equation'''
         match1 = re.match('^(([xy+\-*/()0-9. ]+|sin\(|cos\(|exp\(|log\()?)+$', self.equation_string)
         match2 = re.match('^.*([xy]) *([xy]).*$', self.equation_string)
-        if match1 and not match2:
-            return True
-        return False
+        return match1 and not match2
     
     def prep_equation(self):
         '''
