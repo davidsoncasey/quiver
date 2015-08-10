@@ -1,6 +1,1 @@
-## Quiver
-
-A quick tool to plot direction fields of differential equations.
-
-You can view Quiver in action at
-[quiver.darkgroove.net](http://quiver.darkgroove.net/).
+A handy wrapper that allows somebody to quickly and easily plot equations, using [Sympy](www.sympy.org) and [Matplotlib](matplotlib.org)
