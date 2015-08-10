@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-class DiffEquation(object):
-    '''
+class FieldPlotter(object):
+    """
     Class that contains equation information and, if the equation is valid,
     prepares the plot.
-    '''
+    """
     def __init__(self, equation_string):
         self.equation_string = equation_string
         self.equation = None
@@ -23,17 +23,17 @@ class DiffEquation(object):
         self.figure = None
     
     def regex_check(self):
-        '''A quick regular expression check to see that the input resembles an equation'''
+        """A quick regular expression check to see that the input resembles an equation"""
         match1 = re.match('^(([xy+\-*/()0-9. ]+|sin\(|cos\(|exp\(|log\()?)+$', self.equation_string)
         match2 = re.match('^.*([xy]) *([xy]).*$', self.equation_string)
         return match1 and not match2
     
     def prep_equation(self):
-        '''
+        """
         Attempt to convert the string to a SymPy function.
         From there, use lambdify to generate a function that is efficient to compute
         numerically.
-        '''
+        """
         if self.regex_check():
             q = multiprocessing.Queue()
             def prep(conn):
@@ -65,7 +65,7 @@ class DiffEquation(object):
                 self.compute_func = compute_func
     
     def make_plot(self):
-        '''Draw the plot on the figure attribute'''
+        """Draw the plot on the figure attribute"""
         if self.compute_func:
             xvals, yvals = np.arange(-10, 11, 1), np.arange(-10, 11, 1)
             X, Y = np.meshgrid(xvals, yvals)
@@ -97,7 +97,7 @@ class DiffEquation(object):
             axes.set_title(r'Direction field for $\frac{dy}{dx} = %s$' % latex, y=1.01)
     
     def write_data(self, output):
-        '''Write the data out as base64 binary'''
+        """Write the data out as base64 binary"""
         if self.figure:
             canvas = FigureCanvas(self.figure)
             self.figure.savefig(output, format='png', bbox_inches='tight')
