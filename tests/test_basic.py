@@ -4,6 +4,7 @@ import sympy
 
 from plot_equation import regex_check, FieldPlotter, BadInputError
 
+
 class RegexCheckTestCase(unittest.TestCase):
     
     def test_variables(self):
@@ -31,7 +32,6 @@ class RegexCheckTestCase(unittest.TestCase):
             print bad_equation
             with self.assertRaises(BadInputError):
                 regex_check(bad_equation)
-    
 
 
 class FieldPlotterTestCase(unittest.TestCase):
