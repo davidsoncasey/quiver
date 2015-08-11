@@ -2,7 +2,36 @@ import unittest
 
 import sympy
 
-from plot_equation import FieldPlotter
+from plot_equation import regex_check, FieldPlotter, BadInputError
+
+class RegexCheckTestCase(unittest.TestCase):
+    
+    def test_variables(self):
+        for symbol in ('x', 'y'):
+            self.assertTrue(regex_check(symbol))
+    
+    def test_basic_operations(self):
+        operations = ['+', '-', '*', '/', '**']
+        for op in operations:
+            equation_str = 'x%sy' % op
+            self.assertTrue(regex_check(equation_str))
+    
+    def test_operations(self):
+        operations = ['sin', 'cos', 'exp', 'log']
+        for op in operations:
+            equation_str = '%s(x)' % op
+            self.assertTrue(regex_check(equation_str))
+    
+    def test_malformed_equations(self):
+        bad_equations = [
+            'z',
+            'xy',
+        ]
+        for bad_equation in bad_equations:
+            print bad_equation
+            with self.assertRaises(BadInputError):
+                regex_check(bad_equation)
+    
 
 
 class FieldPlotterTestCase(unittest.TestCase):
@@ -40,6 +69,7 @@ class FieldPlotterTestCase(unittest.TestCase):
         plotter = FieldPlotter()
         plotter.set_equation_from_string(equation_str)
         self.assertIsNone(plotter.equation)
+    
 
 if __name__ == '__main__':
     unittest.main()
