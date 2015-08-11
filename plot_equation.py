@@ -25,8 +25,11 @@ def regex_check(equation_str):
     """A quick regular expression check to see that the input is sane
     
     Args:
-      equation_str(str): String of equation to be parsed by sympify
+      equation_str (str): String of equation to be parsed by sympify
         function. Expected to be valid Python.
+    
+    Raises:
+      BadInputError: If input does not look safe to parse as an equation.
     """
     match1 = re.match(
         r'^(([xy+\-*/()0-9. ]+|sin\(|cos\(|exp\(|log\()?)+$',
