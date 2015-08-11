@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-class MisformedEquationError(Exception):
+class BadInputError(Exception):
     """Error raised if an equation string does not pass regex check."""
     pass
 
@@ -35,7 +35,7 @@ def regex_check(equation_str):
     match2 = re.match(r'^.*([xy]) *([xy]).*$', equation_str)
     if match1 and not match2:
         return True
-    raise MisformedEquationError('Cannot parse entered equation')
+    raise BadInputError('Cannot parse entered equation')
 
 class FieldPlotter(object):
     """
