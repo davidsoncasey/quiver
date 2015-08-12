@@ -70,6 +70,28 @@ class FieldPlotterTestCase(unittest.TestCase):
         plotter.set_equation_from_string(equation_str)
         self.assertIsNone(plotter.equation)
     
+    def test_set_equation_from_string_fail(self):
+        equation_str = 'x***y'
+        plotter = FieldPlotter()
+        
+        # Test that error is raised when not told to fail silently
+        with self.assertRaises(sympy.SympifyError):
+            plotter.set_equation_from_string(equation_str)
+        
+        # Test silent failure
+        plotter.set_equation_from_string(equation_str, fail_silently=True)
+        self.assertIsNone(plotter.equation)
+    
+    def test_make_plot(self):
+        equation = sympy.sympify('x+y')
+        plotter = FieldPlotter(equation)
+        plotter.make_plot()
+        self.assertIsNotNone(plotter.figure)
+    
+    def test_missing_equation(self):
+        plotter = FieldPlotter()
+        with self.assertRaises(FieldPlotter.MissingEquationError):
+            plotter.make_plot()
 
 if __name__ == '__main__':
     unittest.main()
