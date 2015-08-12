@@ -57,6 +57,7 @@ class FieldPlotterTestCase(unittest.TestCase):
             'x+y',
             '2*x',
             'x*y',
+            'x/y',
         ]
         plotter = FieldPlotter()
         for equation_str in equations:
