@@ -92,6 +92,17 @@ class FieldPlotterTestCase(unittest.TestCase):
         plotter = FieldPlotter()
         with self.assertRaises(FieldPlotter.MissingEquationError):
             plotter.make_plot()
+    
+    def test_write_data(self):
+        output = StringIO.StringIO()
+        equation = sympy.sympify('x+y')
+        plotter = FieldPlotter(equation)
+        with open('test.png', 'w+') as output:
+            plotter.write_data(output)
+            output.seek(0)
+            contents = output.read()
+        self.assertIsNotNone(contents)
+
 
 if __name__ == '__main__':
     unittest.main()

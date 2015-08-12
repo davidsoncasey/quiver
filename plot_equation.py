@@ -166,10 +166,11 @@ class FieldPlotter(object):
         axes.set_title(r'Direction field for $\frac{dy}{dx} = %s$' % latex, y=1.01)
     
     def write_data(self, output):
-        """Write the data out as base64 binary"""
+        """Write the data out as base64 binary
+        
+        Args:
+          output (file-like object): Output to write figure to.
+        """
         if self.figure:
             canvas = FigureCanvas(self.figure)
             self.figure.savefig(output, format='png', bbox_inches='tight')
-            output.seek(0)
-            return output.getvalue()
-        return None
