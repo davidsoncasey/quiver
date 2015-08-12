@@ -2,7 +2,7 @@ import unittest
 
 import sympy
 
-from plot_equation import regex_check, FieldPlotter, BadInputError
+from quiver.plotter import regex_check, FieldPlotter, BadInputError
 
 
 class RegexCheckTestCase(unittest.TestCase):
