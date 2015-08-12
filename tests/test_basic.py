@@ -29,7 +29,6 @@ class RegexCheckTestCase(unittest.TestCase):
             'xy',
         ]
         for bad_equation in bad_equations:
-            print bad_equation
             with self.assertRaises(BadInputError):
                 regex_check(bad_equation)
 
