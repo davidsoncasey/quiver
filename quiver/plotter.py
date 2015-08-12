@@ -9,7 +9,12 @@ from __future__ import division
 import re
 from math import sqrt
 import multiprocessing
-import Queue
+
+# Queue module name changed from Python2 to Python3
+try:
+    import Queue as queue
+except ImportError:
+    import queue
 
 import sympy
 import numpy as np
@@ -101,7 +106,7 @@ class FieldPlotter(object):
         # See if we can get the equation within 5 seconds
         try:
             equation, error = q.get(timeout=5)
-        except Queue.Empty:
+        except queue.Empty:
             equation, error = None, None
         q.close()
         
