@@ -89,28 +89,31 @@ class FieldPlotter(object):
         q = multiprocessing.Queue()
         
         def prep(conn):
-            if fail_silently:
-                try:
-                    equation = sympy.sympify(equation_str)
-                except sympy.SympifyError:
-                    equation = None
-            else:
+            equation, error = None, False
+            try:
                 equation = sympy.sympify(equation_str)
-            q.put(equation)
+            except sympy.SympifyError:
+                error = True
+            q.put((equation, error))
         p = multiprocessing.Process(target=prep, args=(q,))
         p.start()
         
         # See if we can get the equation within 5 seconds
         try:
-            equation = q.get(timeout=5)
+            equation, error = q.get(timeout=5)
         except Queue.Empty:
-            equation = None
+            equation, error = None, None
         q.close()
         
         # If the process is still running, kill it
         if p.is_alive():
             p.terminate()
             p.join()
+        
+        # Check if error was raised in sympify call.
+        # If we don't want to fail silently, recall sympify to reraise error
+        if error and not fail_silently:
+            sympy.sympify(equation_str)
         
         self.equation = equation
     
