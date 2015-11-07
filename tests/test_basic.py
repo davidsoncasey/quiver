@@ -104,6 +104,7 @@ class FieldPlotterTestCase(unittest.TestCase):
     def test_write_data(self):
         equation = sympy.sympify('x+y')
         plotter = FieldPlotter(equation)
+        plotter.make_plot()
         with open('test.png', 'w+') as output:
             plotter.write_data(output)
             output.seek(0)
