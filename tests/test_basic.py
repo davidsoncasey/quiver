@@ -82,6 +82,14 @@ class FieldPlotterTestCase(unittest.TestCase):
         plotter.set_equation_from_string(equation_str, fail_silently=True)
         self.assertIsNone(plotter.equation)
     
+    def test_partial_derivative_calculation(self):
+        equation = sympy.sympify('x+y')
+        plotter = FieldPlotter(equation)
+        X, Y, U, V = plotter.calc_partials()
+        for i, x in enumerate(plotter.xrange):
+            for j, y in enumerate(plotter.yrange):
+                self.assertEqual(x + y < 0, V[j][i] < 0)
+    
     def test_make_plot(self):
         equation = sympy.sympify('x+y')
         plotter = FieldPlotter(equation)

@@ -57,10 +57,16 @@ class FieldPlotter(object):
     Attributes:
       equation (sympy.core.basic.Basic): The equation to be plotted.
       figure (matplotlib.figure.Figure): Figure on which plots are made.
+      xrange (numpy ndarray): Range of X values to calculate. Plan on making
+        this adjustable in the future
+      yrange (numpy ndarray): Range of Y values to calculatio. Plan on making
+        this adjustable in the future.
     """
     def __init__(self, equation=None):
         self.equation = equation
         self.figure = None
+        self.xrange = np.arange(-10, 11, 1)
+        self.yrange = np.arange(-10, 11, 1)
     
     def set_equation(self, equation):
         """Set the equation to be plotted.
@@ -126,8 +132,8 @@ class FieldPlotter(object):
         """Error raised if equation attribute has not been set."""
         pass
     
-    def make_plot(self):
-        """Draw the plot on the figure attribute
+    def calc_partials(self):
+        """Calculate the partial derivatives
         
         Uses sympy.utilities.lambdify to convert equation into
         a function that can be easily computed.
@@ -141,30 +147,38 @@ class FieldPlotter(object):
         
         x, y = sympy.symbols('x,y')
         compute_func = sympy.utilities.lambdify((x, y), self.equation)
-        xvals, yvals = np.arange(-10, 11, 1), np.arange(-10, 11, 1)
-        X, Y = np.meshgrid(xvals, yvals)
-        U, V = np.meshgrid(np.zeros(len(xvals)), np.zeros(len(yvals)))
+        X, Y = np.meshgrid(self.xrange, self.yrange)
+        DX, DY = np.meshgrid(np.zeros(len(self.xrange)),
+                             np.zeros(len(self.yrange)))
         
         # Iterate through grid and compute function value at each point
         # If value cannot be computed, default to 0
         # If value can be computed, scale by sqrt of the magnitude
-        for i, a in enumerate(xvals):
-            for j, b in enumerate(yvals):
+        for i, a in enumerate(self.xrange):
+            for j, b in enumerate(self.yrange):
                 dx = 1
                 try:
                     dy = compute_func(a, b)
                     n = sqrt(dx + dy**2)
                     dy /= sqrt(n)
                     dx /= sqrt(n)
-                    U[j][i] = dx
-                    V[j][i] = dy
+                    DX[j][i] = dx
+                    DY[j][i] = dy
                 except (ValueError, ZeroDivisionError):
                     pass
+        return X, Y, DX, DY
+    
+    def make_plot(self):
+        """Draw the plot on the figure attribute
+        
+        Uses matplotlib to draw and format the chart
+        """
+        X, Y, DX, DY = self.calc_partials()
         
         # Plot the values
         self.figure = plt.Figure()
         axes = self.figure.add_subplot(1, 1, 1)
-        axes.quiver(X, Y, U, V, angles='xy', color='b', edgecolors=('k',))
+        axes.quiver(X, Y, DX, DY, angles='xy', color='b', edgecolors=('k',))
         axes.axhline(color='black')
         axes.axvline(color='black')
         latex = sympy.latex(self.equation)
