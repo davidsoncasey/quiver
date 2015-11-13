@@ -13,3 +13,10 @@ script:
 
 notifications:
   email: true
+
+addons:
+  apt:
+    sources:
+      - deadsnakes
+    packages:
+      - python3.5
