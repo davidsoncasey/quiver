@@ -193,3 +193,6 @@ class FieldPlotter(object):
         if self.figure:
             canvas = FigureCanvas(self.figure)
             self.figure.savefig(output, format='png', bbox_inches='tight')
+            output.seek(0)
+            return output.getvalue()
+        return None
