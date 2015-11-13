@@ -1,4 +1,8 @@
 import unittest
+try:
+    import mock
+except ImportError:
+    from unittest import mock
 
 import sympy
 
@@ -105,12 +109,10 @@ class FieldPlotterTestCase(unittest.TestCase):
         equation = sympy.sympify('x+y')
         plotter = FieldPlotter(equation)
         plotter.make_plot()
-        with open('test.png', 'w+') as output:
-            plotter.write_data(output)
-            output.seek(0)
-            contents = output.read()
-        self.assertIsNotNone(contents)
-
+        m = mock.mock_open()
+        with mock.patch('%s.open' % __name__, m, create=True):
+            with open('foo', 'w+b') as output:
+                plotter.write_data(output)
 
 if __name__ == '__main__':
     unittest.main()
