@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script type="text/javascript">
+$(function() {
+    $('#equation-form').submit(function() {
+        $('#plot #error').hide('fast');
+        $.get('{{ url_for("plot") }}', $(this).serializeArray(), function(data, status, xhr) {
+            var ct = xhr.getResponseHeader('content-type') || '';
+            
+            // If the response is an image, display it in plot div.
+            // Otherwise, show the error div
+            if (ct == 'image/png') {
+                $('#plot').html('<img src="data:image/png;base64,' + data + '" />');
+                $('#error').hide();
+                $('#plot').show();
+                setTimeout(function() {
+                    $(window).scrollTo('#plot');
+                }, 200);
+            } else {
+                $('#plot').hide();
+                $('#error').show();
+                setTimeout(function() {
+                    $(window).scrollTo('#error');
+                }, 200);
+            }
+        });
+    return false;
+    });
+    
+    $('.example').click(function() {
+        $('#equation').val($(this).text());
+        $('#equation-form').submit();
+        return false;
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div>
+    <p>
+        Quiver is a tool to plot direction fields of first-order differential equations.
+        It is intended to be a quick and simple tool, and supports the following mathematical operations:
+    </p>
+    <ul>
+        <li>Addition and subtraction</li>
+        <li>Multiplication, division, and exponentiation</li>
+        <li>Sine and cosine</li>
+        <li>Natural exponentiation and natural logarithm</li>
+    </ul>
+    <p>
+        A direction field (or slope field) is a valuable tool for understanding first order differential equations.
+        Many first order differential equations cannot be solved analytically,
+        but by numerically approximation the derivative at several points, the behavior of solutions can be better understood.
+        To learn more about direction fields (and differential equations in general), Wikipedia has a helpful
+        <a href="http://en.wikipedia.org/wiki/Slope_field">article</a>.
+    </p>
+    <p>
+        Quiver is written in Python, and uses <a href="http://www.sympy.org">SymPy</a>
+        and <a href="http://matplotlib.org">matplotlib</a> to generate and plot equations.
+        Variables are assumed to be named "x" and "y" and mathematical operators should be
+        entered with Python syntax (+, -, *, /, **, sin, cos, exp and log). Here are some examples you can try:
+    </p>
+    <ul>
+        <li><a class="example">x + y</a></li>
+        <li><a class="example">2*x + cos(x**y)</a></li>
+        <li><a class="example">sin(log(x))</a></li>
+    </ul>
+    <div style="text-align: center;">
+    <p>Go ahead and give it a try</p>
+        <form id="equation-form" action="{{ url_for('plot') }}" method="get">
+            <sup>dy</sup>&frasl;<sub>dx</sub>=<input type="text" name="equation" id="equation"/>
+            <input type="submit" id="submit" value="Plot"/>
+        </form>
+    </div>
+    <div id="plot"></div>
+    <div id="error" style="display:none;margin-top:20px;">
+        Could not plot your equation. Make sure that
+        <ul>
+            <li>Your equation uses valid Python math syntax</li>
+            <li>Some equations are too difficult to compute. Perhaps try a simpler equation</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
