@@ -1,8 +1,4 @@
 import unittest
-try:
-    import mock
-except ImportError:
-    from unittest import mock
 
 import sympy
 
@@ -104,15 +100,6 @@ class FieldPlotterTestCase(unittest.TestCase):
         plotter = FieldPlotter()
         with self.assertRaises(FieldPlotter.MissingEquationError):
             plotter.make_plot()
-    
-    def test_write_data(self):
-        equation = sympy.sympify('x+y')
-        plotter = FieldPlotter(equation)
-        plotter.make_plot()
-        m = mock.mock_open()
-        with mock.patch('%s.open' % __name__, m, create=True):
-            with open('foo', 'w+b') as output:
-                plotter.write_data(output)
 
 if __name__ == '__main__':
     unittest.main()
