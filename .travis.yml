@@ -3,7 +3,7 @@ language: python
 
 python:
   - "2.7"
-  - "nightly"
+  - "3.5.0b3"
 
 install:
   - pip install tox
@@ -13,10 +13,3 @@ script:
 
 notifications:
   email: true
-
-addons:
-  apt:
-    sources:
-      - deadsnakes
-    packages:
-      - python3.5
