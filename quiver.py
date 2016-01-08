@@ -4,7 +4,7 @@ import signal
 
 import flask
 
-from quiver.plotter import FieldPlotter
+from plotter.plotter import FieldPlotter
 
 app = flask.Flask(__name__)
 

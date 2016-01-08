@@ -5,7 +5,7 @@ import json
 
 import sympy
 
-from quiver.plotter import regex_check, FieldPlotter, BadInputError
+from plotter.plotter import regex_check, FieldPlotter, BadInputError
 
 
 class RegexCheckTestCase(unittest.TestCase):

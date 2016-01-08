@@ -1,7 +1,7 @@
 from setuptools import setup
 setup(
   name='quiver',
-  packages=['quiver'],
+  packages=['plotter'],
   version='0.1',
   description='A simple library to plot direction fields',
   author='Casey Davidson',
