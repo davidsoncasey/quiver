@@ -13,7 +13,7 @@ def quiver():
     '''Route for homepage'''
     return flask.render_template('quiver.html')
 
-@app.route('/plot/', methods=['GET',])
+@app.route('/plot', methods=['GET',])
 def plot():
     equation_string = flask.request.args.get('equation')
     diff_equation = FieldPlotter()
@@ -31,7 +31,7 @@ def plot():
     else:
         return flask.make_response('')
 
-@app.route('/data/', methods=['GET',])
+@app.route('/data', methods=['GET',])
 def data():
     equation_string = flask.request.args.get('equation')
     plotter = FieldPlotter()
