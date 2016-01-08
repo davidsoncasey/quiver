@@ -15,5 +15,6 @@ setup(
     'matplotlib',
     'numpy',
     'sympy',
+    'flask',
   ],
 )
