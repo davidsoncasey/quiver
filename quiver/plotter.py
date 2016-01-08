@@ -196,3 +196,13 @@ class FieldPlotter(object):
             output.seek(0)
             return output.getvalue()
         return None
+    
+    def make_data(self):
+        """Return JSON data of the field"""
+        X, Y, DX, DY = self.calc_partials()
+        data = {}
+        import pdb
+        for x in self.xrange:
+            for y in self.yrange:
+                data[(x, y)] = (DX[y, x], DY[y, x])
+        return data

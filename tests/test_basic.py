@@ -100,6 +100,15 @@ class FieldPlotterTestCase(unittest.TestCase):
         plotter = FieldPlotter()
         with self.assertRaises(FieldPlotter.MissingEquationError):
             plotter.make_plot()
+    
+    def test_make_data(self):
+        equation = sympy.sympify('x*y')
+        plotter = FieldPlotter(equation)
+        data = plotter.make_data()
+        self.assertIsInstance(data, dict)
+        self.assertEqual(len(data), len(plotter.xrange) * len(plotter.yrange))
+        expected_keys = set(tuple(itertools.product(plotter.xrange, plotter.yrange)))
+        self.assertEqual(expected_keys, set(data.keys()))
 
 if __name__ == '__main__':
     unittest.main()

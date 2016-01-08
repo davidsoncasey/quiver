@@ -32,5 +32,13 @@ def plot():
     else:
         return make_response('')
 
+@app.route('/data/', methods=['GET',])
+def data():
+    equation_string = request.args.get('equation')
+    plotter = FieldPlotter()
+    plotter.set_equation_from_string(equation_string)
+    plotter.calc_partials()
+    plotter.write_data()
+
 if __name__ == '__main__':
     app.run(debug=True)
