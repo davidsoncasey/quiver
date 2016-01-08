@@ -198,11 +198,18 @@ class FieldPlotter(object):
         return None
     
     def make_data(self):
-        """Return JSON data of the field"""
+        """Return data of the field in a format that can be converted to JSON
+        
+        Returns:
+          data (dict): A dictionary of dictionaries, such that for a given x, y pair,
+            data[x][y] = {"dx": dx, "dy": dy}. Note that this is transposed from the
+            matrix representation in DX and DY
+        """
         X, Y, DX, DY = self._calc_partials()
         data = {}
         import pdb
         for x in self.xrange:
+            data[x] = {}
             for y in self.yrange:
-                data[(x, y)] = (DX[y, x], DY[y, x])
+                data[x][y] = {"dx": DX[y, x], "dy": DY[y, x]}
         return data

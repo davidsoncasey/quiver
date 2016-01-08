@@ -36,7 +36,11 @@ def data():
     equation_string = flask.request.args.get('equation')
     plotter = FieldPlotter()
     plotter.set_equation_from_string(equation_string)
-    plotter.make_data()
+    data = plotter.make_data()
+    json_data = flask.json.dumps(data)
+    response = flask.make_response(json_data)
+    response.mimetype = 'text/json'
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
