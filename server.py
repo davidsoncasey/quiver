@@ -18,7 +18,6 @@ def plot():
     equation_string = request.args.get('equation')
     diff_equation = FieldPlotter()
     diff_equation.set_equation_from_string(equation_string)
-    diff_equation.calc_partials()
     diff_equation.make_plot()
     
     # If plotting was successful, write plot out
@@ -37,8 +36,7 @@ def data():
     equation_string = request.args.get('equation')
     plotter = FieldPlotter()
     plotter.set_equation_from_string(equation_string)
-    plotter.calc_partials()
-    plotter.write_data()
+    plotter.make_data()
 
 if __name__ == '__main__':
     app.run(debug=True)

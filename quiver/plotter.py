@@ -132,7 +132,7 @@ class FieldPlotter(object):
         """Error raised if equation attribute has not been set."""
         pass
     
-    def calc_partials(self):
+    def _calc_partials(self):
         """Calculate the partial derivatives
         
         Uses sympy.utilities.lambdify to convert equation into
@@ -173,7 +173,7 @@ class FieldPlotter(object):
         
         Uses matplotlib to draw and format the chart
         """
-        X, Y, DX, DY = self.calc_partials()
+        X, Y, DX, DY = self._calc_partials()
         
         # Plot the values
         self.figure = plt.Figure()
@@ -199,7 +199,7 @@ class FieldPlotter(object):
     
     def make_data(self):
         """Return JSON data of the field"""
-        X, Y, DX, DY = self.calc_partials()
+        X, Y, DX, DY = self._calc_partials()
         data = {}
         import pdb
         for x in self.xrange:
