@@ -113,11 +113,10 @@ class FieldPlotterTestCase(unittest.TestCase):
         for x in plotter.xrange:
             self.assertEqual(set(data[x].keys()), set(plotter.yrange))
     
-    def test_data_conversion_to_json(self):
+    def test_json_data(self):
         equation = sympy.sympify('x*y')
         plotter = FieldPlotter(equation)
-        data = plotter.make_data()
-        json_data = json.dumps(data)
+        json_data = plotter.json_data()
 
 if __name__ == '__main__':
     unittest.main()

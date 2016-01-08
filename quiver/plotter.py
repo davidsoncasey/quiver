@@ -9,6 +9,7 @@ from __future__ import division
 import re
 from math import sqrt
 import multiprocessing
+import json
 
 # Queue module name changed from Python2 to Python3
 try:
@@ -213,3 +214,17 @@ class FieldPlotter(object):
             for y in self.yrange:
                 data[x][y] = {"dx": DX[y, x], "dy": DY[y, x]}
         return data
+    
+    def json_data(self):
+        """Returns data as JSON
+        
+        Returns:
+          json_data (str): JSON representation of data, as created in make_data
+        """
+        def stringify_keys(d):
+            if not isinstance(d, dict):
+                return d
+            return dict((str(k), stringify_keys(v)) for k, v in d.items())
+        data = self.make_data()
+        json_data = json.dumps(stringify_keys(data))
+        return json_data
