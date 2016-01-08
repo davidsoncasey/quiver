@@ -159,7 +159,7 @@ class FieldPlotter(object):
                 dx = 1
                 try:
                     dy = compute_func(a, b)
-                    n = sqrt(dx + dy**2)
+                    n = sqrt(dx**2 + dy**2)
                     dy /= sqrt(n)
                     dx /= sqrt(n)
                     DX[j][i] = dx
