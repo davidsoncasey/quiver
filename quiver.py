@@ -1,6 +1,9 @@
-import StringIO
 import base64
 import signal
+try:
+    import StringIO
+except ImportError:
+    from io import StringIO
 
 import flask
 
